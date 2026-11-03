@@ -36,11 +36,15 @@ def show() -> None:
     print(f"共 {len(items)} 项")
 
 
-def done(index: int) -> None:
+def done(index: int) -> bool:
     items = load()
-    items.pop(index)
+    if index < 1 or index > len(items):
+        print("no such item", file=sys.stderr)
+        return False
+    del items[index - 1]
     save(items)
     print(f"done: {index}")
+    return True
 
 
 def remove(index: int) -> bool:
@@ -64,7 +68,12 @@ def main(argv: list[str]) -> int:
     elif command == "list":
         show()
     elif command == "done" and rest:
-        done(int(rest[0]))
+        try:
+            index = int(rest[0])
+        except ValueError:
+            index = 0
+        if not done(index):
+            return 1
     elif command == "remove" and rest:
         try:
             index = int(rest[0])
