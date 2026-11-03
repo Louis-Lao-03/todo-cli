@@ -13,7 +13,10 @@ def load() -> list[str]:
 
 
 def save(items: list[str]) -> None:
-    DB.write_text("\n".join(items) + "\n", encoding="utf-8")
+    text = "\n".join(items)
+    if text:
+        text += "\n"
+    DB.write_text(text, encoding="utf-8")
 
 
 def add(text: str) -> None:
@@ -40,6 +43,17 @@ def done(index: int) -> None:
     print(f"done: {index}")
 
 
+def remove(index: int) -> bool:
+    items = load()
+    if index < 1 or index > len(items):
+        print("no such item", file=sys.stderr)
+        return False
+    del items[index - 1]
+    save(items)
+    print(f"removed: {index}")
+    return True
+
+
 def main(argv: list[str]) -> int:
     if len(argv) < 2:
         show()
@@ -51,6 +65,13 @@ def main(argv: list[str]) -> int:
         show()
     elif command == "done" and rest:
         done(int(rest[0]))
+    elif command == "remove" and rest:
+        try:
+            index = int(rest[0])
+        except ValueError:
+            index = 0
+        if not remove(index):
+            return 1
     else:
         print(f"unknown command: {command}", file=sys.stderr)
         return 2
