@@ -30,6 +30,7 @@ def show() -> None:
         return
     for index, item in enumerate(items, start=1):
         print(f"{index}. {item}")
+    print(f"共 {len(items)} 项")
 
 
 def done(index: int) -> None:
