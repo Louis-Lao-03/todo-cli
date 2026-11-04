@@ -58,6 +58,12 @@ def remove(index: int) -> bool:
     return True
 
 
+def all_items() -> list[str]:
+    """Return every todo."""
+    return load()
+
+
+
 def main(argv: list[str]) -> int:
     if len(argv) < 2:
         show()
@@ -89,8 +95,3 @@ def main(argv: list[str]) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv))
-
-
-def all_items() -> list[str]:
-    """Return every todo."""
-    return load()[:-1]
